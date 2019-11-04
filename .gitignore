@@ -1,0 +1,3 @@
+#Data and results, without ignoring folders
+./Data/*
+./Results/*
