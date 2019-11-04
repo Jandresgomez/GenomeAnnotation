@@ -81,12 +81,13 @@ public class ModelLearner {
 			for(int i = 0; i < counts.length; i++) {
 				String label = labels[i];
 				double rate = total > 0? 100*(counts[i]/total) : 0.0;
-				System.out.println(String.format("%s -> %s (%d, %f)", key, label, counts[i], rate));
+				System.out.println(String.format("%s -> %s (%d, %f%%)", key, label, counts[i], rate));
 			}
 		}
 	}
 	
-	public void dumpOcurrencesModel(String filename) throws FileNotFoundException {
+	public void dumpOcurrencesModelToFile(String filename) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(new File(filename));
 		for(String key : modelOcurrences.keySet()) {
 			int[] counts = modelOcurrences.get(key);
 			
@@ -96,9 +97,11 @@ public class ModelLearner {
 			for(int i = 0; i < counts.length; i++) {
 				String label = labels[i];
 				double rate = total > 0? 100*(counts[i]/total) : 0.0;
-				System.out.println(String.format("%s;%s;%d;%f", key, label, counts[i], rate));
+				pw.println(String.format("%s;%s;%d;%f", key, label, counts[i], rate));
 			}
 		}
+		pw.flush();
+		pw.close();
 	}
 	
 	public void printOcurrencesToFile(String filename) throws FileNotFoundException {
@@ -161,7 +164,7 @@ public class ModelLearner {
 			for(String genome : args) {
 				ModelLearner ml = new ModelLearner("./Data/" + genome + ".fasta", "./Data/" + genome + ".gff3");
 				ml.addOcurrences();
-				ml.printOcurrencesToFile("./Results/" + genome + ".hmm");
+				ml.dumpOcurrencesModelToFile("./Results/" + genome + ".hmm");
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
