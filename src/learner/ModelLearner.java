@@ -11,10 +11,10 @@ import java.util.HashMap;
 import utils.GeneAnnotation;
 
 public class ModelLearner {
-	private static final String INIT_KEY = "START";
+	public static final String INIT_KEY = "START";
 	
 	private HashMap<String, int[]> modelOcurrences = new HashMap<String, int[]>();
-	private String[] labels = { "A+", "C+", "G+", "T+", "A-", "C-", "G-", "T-" };
+	private static String[] labels = { "A+", "C+", "G+", "T+", "A-", "C-", "G-", "T-" };
 	private BufferedReader genomeBr;
 	private BufferedReader annotationBr;
 	private GeneAnnotation currentGene;
@@ -81,7 +81,22 @@ public class ModelLearner {
 			for(int i = 0; i < counts.length; i++) {
 				String label = labels[i];
 				double rate = total > 0? 100*(counts[i]/total) : 0.0;
-				System.out.println(String.format("%s -> %s (%d, %f%%)", key, label, counts[i], rate));
+				System.out.println(String.format("%s -> %s (%d, %f)", key, label, counts[i], rate));
+			}
+		}
+	}
+	
+	public void dumpOcurrencesModel(String filename) throws FileNotFoundException {
+		for(String key : modelOcurrences.keySet()) {
+			int[] counts = modelOcurrences.get(key);
+			
+			double total = 0;
+			for(int i = 0; i < counts.length; i++) total += counts[i];
+			
+			for(int i = 0; i < counts.length; i++) {
+				String label = labels[i];
+				double rate = total > 0? 100*(counts[i]/total) : 0.0;
+				System.out.println(String.format("%s;%s;%d;%f", key, label, counts[i], rate));
 			}
 		}
 	}
@@ -135,6 +150,10 @@ public class ModelLearner {
 				}
 			}
 		}
+	}
+	
+	public static String[] getLabels() {
+		return labels;
 	}
 
 	public static void main(String[] args) {

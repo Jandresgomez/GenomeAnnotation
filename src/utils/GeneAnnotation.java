@@ -15,6 +15,16 @@ public class GeneAnnotation {
 		isPositiveStrand = data[6].equals("+"); 
 	}
 	
+	
+	
+	public GeneAnnotation(int posInit, int posFin, boolean isPositiveStrand) {
+		this.posInit = posInit;
+		this.posFin = posFin;
+		this.isPositiveStrand = isPositiveStrand;
+	}
+
+
+
 	public static boolean isValidAnnotation(String line) {
 		return line.contains("gene\t");
 	}
