@@ -20,21 +20,21 @@ public class ModelLearner {
 	private GeneAnnotation currentGene;
 	private boolean canUpdate = true;
 
-	public ModelLearner(String genomeFilePath, String annotationFilePath) throws IOException, FileNotFoundException {
+	public ModelLearner() throws IOException, FileNotFoundException {
 		for (String item : labels) {
 			int[] quants = new int[labels.length];
 			modelOcurrences.put(item, quants);
 		}
-
 		modelOcurrences.put(INIT_KEY, new int[labels.length]);
-
-		genomeBr = new BufferedReader(new FileReader(new File(genomeFilePath)));
-		annotationBr = new BufferedReader(new FileReader(new File(annotationFilePath)));
-		
-		updateCurrentGene();
 	}
 
-	public void addOcurrences() throws IOException {
+	public void addOcurrences(String genomeFilePath, String annotationFilePath) throws IOException {
+		//Reset stuff
+		genomeBr = new BufferedReader(new FileReader(new File(genomeFilePath)));
+		annotationBr = new BufferedReader(new FileReader(new File(annotationFilePath)));
+		updateCurrentGene();
+		
+		
 		//Skip first line (genome description)
 		genomeBr.readLine();
 		String line = genomeBr.readLine();
@@ -161,11 +161,11 @@ public class ModelLearner {
 
 	public static void main(String[] args) {
 		try {
+			ModelLearner ml = new ModelLearner();
 			for(String genome : args) {
-				ModelLearner ml = new ModelLearner("./Data/" + genome + ".fasta", "./Data/" + genome + ".gff3");
-				ml.addOcurrences();
-				ml.dumpOcurrencesModelToFile("./Results/" + genome + ".hmm");
+				ml.addOcurrences("./Data/" + genome + ".fasta", "./Data/" + genome + ".gff3");
 			}
+			ml.dumpOcurrencesModelToFile("./Results/model.hmm");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
