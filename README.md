@@ -1,7 +1,7 @@
 
 # Authors
-Jorge Andrés Gómez 
-Laura Carolina Camelo Valera
+* Jorge Andrés Gómez 
+* Laura Carolina Camelo Valera
 
 # GenomeAnnotation
 Genome annotation for prokaryote genomes via HHM and dynamic programming.
